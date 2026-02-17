@@ -196,6 +196,52 @@
         .pixel-corner.tr { top: -4px; right: -4px; }
         .pixel-corner.bl { bottom: -4px; left: -4px; }
         .pixel-corner.br { bottom: -4px; right: -4px; }
+        
+        .save-controls {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .save-btn {
+            background: #16213e;
+            border: 4px solid #4ecca3;
+            color: #4ecca3;
+            padding: 12px 20px;
+            cursor: pointer;
+            font-size: 1em;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            text-shadow: 2px 2px 0 #000;
+            box-shadow: 4px 4px 0 #000;
+            transition: all 0.2s;
+        }
+        
+        .save-btn:hover {
+            background: #0f3460;
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0 #000;
+        }
+        
+        .save-btn:active {
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0 #000;
+        }
+        
+        .save-btn.reset {
+            border-color: #ff6b6b;
+            color: #ff6b6b;
+        }
+        
+        .save-status {
+            margin-top: 10px;
+            font-size: 0.9em;
+            color: #4ecca3;
+            text-shadow: 2px 2px 0 #000;
+            min-height: 20px;
+        }
     </style>
 </head>
 <body>
@@ -236,6 +282,11 @@
                 <span class="effect">+10 per second</span>
             </button>
         </div>
+        <div class="save-controls">
+            <button class="save-btn" onclick="saveGame()">💾 SAVE GAME</button>
+            <button class="save-btn reset" onclick="resetGame()">🔄 RESET GAME</button>
+        </div>
+        <div class="save-status" id="saveStatus"></div>
     </div>
 
     <script>
@@ -249,6 +300,90 @@
         let autoUpgradeCost = 50;
         let multiplierUpgradeCost = 200;
         let farmUpgradeCost = 500;
+
+        // Load game on start
+        function loadGame() {
+            const savedGame = localStorage.getItem('bananaClickerSave');
+            if (savedGame) {
+                try {
+                    const data = JSON.parse(savedGame);
+                    bananas = data.bananas || 0;
+                    bananasPerClick = data.bananasPerClick || 1;
+                    bananasPerSecond = data.bananasPerSecond || 0;
+                    totalClicks = data.totalClicks || 0;
+                    clickMultiplier = data.clickMultiplier || 1;
+                    clickUpgradeCost = data.clickUpgradeCost || 10;
+                    autoUpgradeCost = data.autoUpgradeCost || 50;
+                    multiplierUpgradeCost = data.multiplierUpgradeCost || 200;
+                    farmUpgradeCost = data.farmUpgradeCost || 500;
+                    
+                    showSaveStatus('💾 GAME LOADED!');
+                } catch (e) {
+                    console.error('Failed to load save:', e);
+                    showSaveStatus('⚠️ LOAD FAILED!');
+                }
+            }
+            updateDisplay();
+        }
+
+        // Save game
+        function saveGame() {
+            try {
+                const saveData = {
+                    bananas,
+                    bananasPerClick,
+                    bananasPerSecond,
+                    totalClicks,
+                    clickMultiplier,
+                    clickUpgradeCost,
+                    autoUpgradeCost,
+                    multiplierUpgradeCost,
+                    farmUpgradeCost,
+                    savedAt: new Date().toISOString()
+                };
+                
+                localStorage.setItem('bananaClickerSave', JSON.stringify(saveData));
+                showSaveStatus('✅ GAME SAVED!');
+            } catch (e) {
+                console.error('Failed to save:', e);
+                showSaveStatus('⚠️ SAVE FAILED!');
+            }
+        }
+
+        // Auto-save every 30 seconds
+        setInterval(() => {
+            saveGame();
+        }, 30000);
+
+        // Reset game
+        function resetGame() {
+            if (confirm('Are you sure you want to RESET all progress? This cannot be undone!')) {
+                localStorage.removeItem('bananaClickerSave');
+                
+                // Reset all variables to initial values
+                bananas = 0;
+                bananasPerClick = 1;
+                bananasPerSecond = 0;
+                totalClicks = 0;
+                clickMultiplier = 1;
+                clickUpgradeCost = 10;
+                autoUpgradeCost = 50;
+                multiplierUpgradeCost = 200;
+                farmUpgradeCost = 500;
+                
+                updateDisplay();
+                showSaveStatus('🔄 GAME RESET!');
+            }
+        }
+
+        // Show save status message
+        function showSaveStatus(message) {
+            const status = document.getElementById('saveStatus');
+            status.textContent = message;
+            setTimeout(() => {
+                status.textContent = '';
+            }, 3000);
+        }
 
         function clickBanana(event) {
             const earnedBananas = bananasPerClick * clickMultiplier;
@@ -275,6 +410,7 @@
                 bananasPerClick++;
                 clickUpgradeCost = Math.floor(clickUpgradeCost * 1.5);
                 updateDisplay();
+                saveGame();
             }
         }
 
@@ -284,6 +420,7 @@
                 bananasPerSecond++;
                 autoUpgradeCost = Math.floor(autoUpgradeCost * 1.8);
                 updateDisplay();
+                saveGame();
             }
         }
 
@@ -293,6 +430,7 @@
                 clickMultiplier *= 2;
                 multiplierUpgradeCost = Math.floor(multiplierUpgradeCost * 3);
                 updateDisplay();
+                saveGame();
             }
         }
 
@@ -302,6 +440,7 @@
                 bananasPerSecond += 10;
                 farmUpgradeCost = Math.floor(farmUpgradeCost * 2.5);
                 updateDisplay();
+                saveGame();
             }
         }
 
@@ -330,8 +469,13 @@
             }
         }, 100);
 
-        // Initial display update
-        updateDisplay();
+        // Load game on page load
+        loadGame();
+
+        // Save game before page unload
+        window.addEventListener('beforeunload', () => {
+            saveGame();
+        });
     </script>
 </body>
 </html>
