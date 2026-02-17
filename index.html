@@ -5,826 +5,566 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🍌 Banana Clicker 🍌</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        @font-face {
-            font-family: 'PixelFont';
-            src: local('Courier New'), local('Consolas'), local('Monaco');
-        }
-
+        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            font-family: 'Courier New', 'Consolas', monospace;
-            background: #87CEEB;
-            background-image: 
-                repeating-linear-gradient(0deg, transparent, transparent 4px, rgba(0,0,0,.03) 4px, rgba(0,0,0,.03) 8px),
-                repeating-linear-gradient(90deg, transparent, transparent 4px, rgba(0,0,0,.03) 4px, rgba(0,0,0,.03) 8px);
-            color: #2c1810;
+            font-family: 'Press Start 2P', monospace;
+            background: #1a0a2e;
+            background-image:
+                repeating-linear-gradient(0deg, transparent, transparent 4px, rgba(255,255,0,.02) 4px, rgba(255,255,0,.02) 8px),
+                repeating-linear-gradient(90deg, transparent, transparent 4px, rgba(255,255,0,.02) 4px, rgba(255,255,0,.02) 8px);
+            color: #ffe066;
             min-height: 100vh;
             display: flex;
             justify-content: center;
-            align-items: center;
-            padding: 20px;
-            overflow-x: hidden;
-            image-rendering: pixelated;
-            image-rendering: -moz-crisp-edges;
-            image-rendering: crisp-edges;
-        }
-
-        .game-container {
-            background: #FFE4B5;
-            border: 8px solid #000;
-            box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.3);
-            max-width: 1200px;
-            width: 100%;
             padding: 16px;
+            image-rendering: pixelated;
+            overflow-x: hidden;
         }
-
+        .game-wrap { max-width: 1100px; width: 100%; }
         header {
             text-align: center;
-            background: #FFD700;
-            border: 4px solid #000;
-            padding: 12px;
-            margin-bottom: 16px;
-            box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.2);
-        }
-
-        h1 {
-            font-size: 2em;
-            color: #000;
-            letter-spacing: 3px;
-            text-shadow: 
-                2px 0 0 #FFF,
-                -2px 0 0 #FFF,
-                0 2px 0 #FFF,
-                0 -2px 0 #FFF,
-                4px 4px 0 #8B4513;
-        }
-
-        .stats {
-            display: flex;
-            justify-content: space-around;
-            margin: 12px 0;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-
-        .stat {
-            background: #FFF;
-            border: 4px solid #000;
-            padding: 8px 16px;
-            min-width: 140px;
-            text-align: center;
-            box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.2);
-        }
-
-        .stat-label {
-            font-size: 0.7em;
-            color: #666;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .stat-value {
-            font-size: 1.3em;
-            font-weight: bold;
-            color: #000;
-        }
-
-        .main-content {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
-            margin-top: 16px;
-        }
-
-        @media (max-width: 768px) {
-            .main-content {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .click-area {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            background: #90EE90;
-            border: 4px solid #000;
-            padding: 24px;
-            min-height: 400px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        #banana {
-            width: 160px;
-            height: 160px;
-            cursor: pointer;
-            position: relative;
-            z-index: 10;
-        }
-
-        #banana:hover {
-            filter: brightness(1.1);
-        }
-
-        #banana:active {
-            filter: brightness(0.9);
-        }
-
-        .banana-pixel {
-            font-size: 160px;
-            user-select: none;
-            line-height: 1;
-            animation: float 2s ease-in-out infinite;
-            filter: drop-shadow(4px 4px 0px rgba(0, 0, 0, 0.3));
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0px) rotate(-5deg); }
-            50% { transform: translateY(-8px) rotate(5deg); }
-        }
-
-        .click-particle {
-            position: absolute;
-            font-size: 20px;
-            font-weight: bold;
-            color: #FFD700;
-            text-shadow: 
-                2px 0 0 #000,
-                -2px 0 0 #000,
-                0 2px 0 #000,
-                0 -2px 0 #000;
-            pointer-events: none;
-            animation: particle-rise 1s ease-out forwards;
-            z-index: 100;
-        }
-
-        @keyframes particle-rise {
-            0% {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
-            100% {
-                opacity: 0;
-                transform: translateY(-80px) scale(1.3);
-            }
-        }
-
-        .shop-panel, .prestige-panel {
-            background: #F5DEB3;
-            border: 4px solid #000;
-            padding: 16px;
-        }
-
-        .panel-title {
-            font-size: 1.3em;
-            font-weight: bold;
-            text-align: center;
+            background: #2d1b4e;
+            border: 6px solid #ffe066;
+            padding: 14px 10px;
             margin-bottom: 12px;
-            color: #000;
-            text-transform: uppercase;
-            border-bottom: 4px solid #000;
-            padding-bottom: 8px;
-            letter-spacing: 2px;
+            box-shadow: 6px 6px 0 #000;
         }
-
-        .upgrades {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            max-height: 500px;
-            overflow-y: auto;
-            padding-right: 4px;
+        h1 { font-size: 1.5em; color: #ffe066; letter-spacing: 2px; text-shadow: 3px 3px 0 #000; }
+        .stats { display: flex; justify-content: center; gap: 14px; margin-top: 10px; flex-wrap: wrap; }
+        .stat { background: #3b2566; border: 4px solid #ffe066; padding: 8px 18px; text-align: center; box-shadow: 4px 4px 0 #000; min-width: 130px; }
+        .stat-label { font-size: .55em; color: #c9a0dc; text-transform: uppercase; letter-spacing: 1px; }
+        .stat-value { font-size: 1.1em; font-weight: bold; color: #ffe066; margin-top: 2px; }
+        .main { display: grid; grid-template-columns: 300px 1fr; gap: 14px; }
+        @media(max-width:820px){ .main{ grid-template-columns:1fr; } }
+        /* Click area */
+        .click-area {
+            background: #2d1b4e; border: 6px solid #ffe066; display: flex; flex-direction: column;
+            align-items: center; justify-content: center; padding: 24px; min-height: 360px;
+            position: relative; overflow: hidden; box-shadow: 6px 6px 0 #000;
         }
-
-        .upgrades::-webkit-scrollbar {
-            width: 12px;
+        .banana-btn {
+            font-size: 130px; cursor: pointer; user-select: none; line-height: 1;
+            animation: bob 1.6s ease-in-out infinite; filter: drop-shadow(4px 4px 0 #000);
+            transition: transform .06s;
         }
-
-        .upgrades::-webkit-scrollbar-track {
-            background: #DEB887;
-            border: 2px solid #000;
+        .banana-btn:active { transform: scale(.88) !important; }
+        @keyframes bob { 0%,100%{ transform: translateY(0) rotate(-4deg); } 50%{ transform: translateY(-10px) rotate(4deg); } }
+        .per-click-label { margin-top: 12px; font-size: .6em; color: #c9a0dc; }
+        .click-particle {
+            position: absolute; font-size: .7em; font-weight: bold; color: #ffe066;
+            text-shadow: 2px 2px 0 #000; pointer-events: none; z-index: 50;
+            animation: rise .9s ease-out forwards;
         }
-
-        .upgrades::-webkit-scrollbar-thumb {
-            background: #8B4513;
-            border: 2px solid #000;
+        @keyframes rise { 0%{ opacity:1; transform:translateY(0) scale(1); } 100%{ opacity:0; transform:translateY(-70px) scale(1.3); } }
+        /* Panels */
+        .panel { background: #2d1b4e; border: 6px solid #ffe066; padding: 14px; box-shadow: 6px 6px 0 #000; margin-bottom: 14px; }
+        .panel-title { font-size: .85em; text-align: center; margin-bottom: 10px; color: #ffe066; border-bottom: 4px solid #ffe066; padding-bottom: 8px; letter-spacing: 2px; }
+        /* Tabs */
+        .tabs { display: flex; gap: 6px; margin-bottom: 10px; flex-wrap: wrap; }
+        .tab-btn {
+            flex: 1; background: #3b2566; border: 4px solid #ffe066; padding: 8px 4px;
+            font-family: 'Press Start 2P', monospace; font-size: .55em; color: #c9a0dc;
+            cursor: pointer; text-align: center; transition: all .1s; box-shadow: 3px 3px 0 #000;
         }
-
-        .upgrade {
-            background: #FFF;
-            border: 4px solid #000;
-            padding: 10px;
-            display: grid;
-            grid-template-columns: 48px 1fr auto;
-            gap: 8px;
-            align-items: center;
-            transition: all 0.1s;
-            box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.2);
+        .tab-btn:hover, .tab-btn.active { background: #ffe066; color: #1a0a2e; }
+        .tab-content { display: none; } .tab-content.active { display: block; }
+        /* Upgrades */
+        .upgrade-list { display: flex; flex-direction: column; gap: 8px; max-height: 420px; overflow-y: auto; padding-right: 4px; }
+        .upgrade-list::-webkit-scrollbar { width: 10px; }
+        .upgrade-list::-webkit-scrollbar-track { background: #1a0a2e; border: 2px solid #ffe066; }
+        .upgrade-list::-webkit-scrollbar-thumb { background: #ffe066; border: 2px solid #1a0a2e; }
+        .upgrade-item {
+            background: #3b2566; border: 4px solid #ffe066; padding: 10px;
+            display: grid; grid-template-columns: 40px 1fr auto; gap: 8px; align-items: center;
+            cursor: pointer; transition: all .1s; box-shadow: 3px 3px 0 #000;
         }
-
-        .upgrade:hover:not(.disabled) {
-            background: #FFFACD;
-            transform: translate(-2px, -2px);
-            box-shadow: 5px 5px 0 rgba(0, 0, 0, 0.3);
+        .upgrade-item:hover:not(.locked) { background: #4e3480; transform: translate(-2px,-2px); box-shadow: 5px 5px 0 #000; }
+        .upgrade-item:active:not(.locked) { transform: translate(0,0); box-shadow: 2px 2px 0 #000; }
+        .upgrade-item.locked { opacity: .35; cursor: not-allowed; filter: grayscale(.6); }
+        .up-icon { font-size: 1.8em; text-align: center; line-height: 1; }
+        .up-name { font-size: .65em; color: #ffe066; }
+        .up-desc { font-size: .45em; color: #c9a0dc; margin-top: 2px; }
+        .up-stats { font-size: .45em; color: #66ff99; margin-top: 2px; }
+        .up-cost { font-size: .55em; color: #ffaa33; text-align: right; }
+        .up-owned { font-size: .45em; color: #c9a0dc; text-align: right; }
+        /* Rebirth */
+        .rebirth-box { text-align: center; padding: 10px; }
+        .rb-currency { font-size: 1.8em; margin: 10px 0; text-shadow: 2px 2px 0 #000; }
+        .rb-info { background: #3b2566; border: 4px solid #ffe066; padding: 12px; margin: 10px 0; box-shadow: 3px 3px 0 #000; }
+        .rb-info p { margin: 6px 0; font-size: .6em; color: #c9a0dc; }
+        .rb-info span { color: #ffe066; }
+        .rb-btn {
+            background: #ff4466; border: 4px solid #ffe066; padding: 12px 28px;
+            font-family: 'Press Start 2P', monospace; font-size: .7em; cursor: pointer;
+            color: #fff; text-shadow: 2px 2px 0 #000; box-shadow: 4px 4px 0 #000;
+            transition: all .1s; margin-top: 6px;
         }
-
-        .upgrade:active:not(.disabled) {
-            transform: translate(0, 0);
-            box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.3);
+        .rb-btn:hover:not(.off) { background: #ff6688; transform: translate(-2px,-2px); box-shadow: 6px 6px 0 #000; }
+        .rb-btn.off { opacity: .35; cursor: not-allowed; }
+        /* Rebirth upgrades */
+        .rb-upgrade {
+            background: #3b2566; border: 4px solid #ff9900; padding: 10px;
+            display: grid; grid-template-columns: 36px 1fr auto; gap: 8px; align-items: center;
+            cursor: pointer; transition: all .1s; box-shadow: 3px 3px 0 #000; margin-bottom: 8px;
         }
-
-        .upgrade.disabled {
-            opacity: 0.4;
-            cursor: not-allowed;
-            filter: grayscale(100%);
+        .rb-upgrade:hover:not(.locked) { background: #4e3480; transform: translate(-2px,-2px); box-shadow: 5px 5px 0 #000; }
+        .rb-upgrade.locked { opacity: .35; cursor: not-allowed; }
+        .rb-upgrade.owned-rb { border-color: #66ff99; opacity: .6; }
+        /* Settings */
+        .settings { margin-top: 14px; text-align: center; display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+        .s-btn {
+            background: #3b2566; border: 4px solid #ffe066; padding: 8px 16px;
+            font-family: 'Press Start 2P', monospace; font-size: .5em; color: #ffe066;
+            cursor: pointer; box-shadow: 3px 3px 0 #000; transition: all .1s;
         }
-
-        .upgrade-icon {
-            font-size: 2.5em;
-            text-align: center;
-            line-height: 1;
+        .s-btn:hover { background: #ffe066; color: #1a0a2e; }
+        /* Toast */
+        .toast {
+            position: fixed; top: 16px; right: 16px; background: #ffe066; border: 4px solid #000;
+            padding: 12px 16px; box-shadow: 4px 4px 0 #000; z-index: 999; max-width: 260px;
+            animation: slideIn .3s ease-out, slideOut .3s ease-in 2.5s forwards;
         }
-
-        .upgrade-info {
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
-        }
-
-        .upgrade-name {
-            font-weight: bold;
-            font-size: 1em;
-            color: #000;
-        }
-
-        .upgrade-description {
-            font-size: 0.7em;
-            color: #555;
-        }
-
-        .upgrade-stats {
-            font-size: 0.65em;
-            color: #228B22;
-            font-weight: bold;
-        }
-
-        .upgrade-buy {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-end;
-            gap: 4px;
-        }
-
-        .upgrade-cost {
-            font-weight: bold;
-            color: #8B4513;
-            font-size: 0.9em;
-        }
-
-        .upgrade-button {
-            background: #FFD700;
-            border: 3px solid #000;
-            padding: 6px 12px;
-            font-family: 'Courier New', monospace;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.1s;
-            box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.3);
-            font-size: 0.85em;
-        }
-
-        .upgrade-button:hover {
-            background: #FFED4E;
-            transform: translate(-1px, -1px);
-            box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.3);
-        }
-
-        .upgrade-button:active {
-            transform: translate(0, 0);
-            box-shadow: 1px 1px 0 rgba(0, 0, 0, 0.3);
-        }
-
-        .prestige-content {
-            text-align: center;
-            padding: 16px;
-        }
-
-        .golden-bananas {
-            font-size: 2.5em;
-            margin: 16px 0;
-            text-shadow: 
-                2px 0 0 #000,
-                -2px 0 0 #000,
-                0 2px 0 #000,
-                0 -2px 0 #000;
-        }
-
-        .prestige-info {
-            background: #FFF;
-            border: 4px solid #000;
-            padding: 12px;
-            margin: 12px 0;
-            box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.2);
-        }
-
-        .prestige-info p {
-            margin: 6px 0;
-            font-size: 1em;
-        }
-
-        .prestige-button {
-            background: #FF6347;
-            border: 4px solid #000;
-            padding: 12px 24px;
-            font-family: 'Courier New', monospace;
-            font-weight: bold;
-            font-size: 1.1em;
-            cursor: pointer;
-            transition: all 0.1s;
-            color: #FFF;
-            text-shadow: 2px 2px 0 #000;
-            margin-top: 8px;
-            box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.3);
-        }
-
-        .prestige-button:hover:not(.disabled) {
-            background: #FF7F50;
-            transform: translate(-2px, -2px);
-            box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.3);
-        }
-
-        .prestige-button:active:not(.disabled) {
-            transform: translate(0, 0);
-            box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.3);
-        }
-
-        .prestige-button.disabled {
-            opacity: 0.4;
-            cursor: not-allowed;
-            filter: grayscale(100%);
-        }
-
-        .settings {
-            margin-top: 16px;
-            text-align: center;
-        }
-
-        .settings-button {
-            background: #E0E0E0;
-            border: 3px solid #000;
-            padding: 8px 14px;
-            font-family: 'Courier New', monospace;
-            cursor: pointer;
-            margin: 4px;
-            transition: all 0.1s;
-            box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.3);
-            font-weight: bold;
-        }
-
-        .settings-button:hover {
-            background: #D0D0D0;
-            transform: translate(-1px, -1px);
-            box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.3);
-        }
-
-        .settings-button:active {
-            transform: translate(0, 0);
-            box-shadow: 1px 1px 0 rgba(0, 0, 0, 0.3);
-        }
-
-        .achievement-toast {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: #FFD700;
-            border: 4px solid #000;
-            padding: 12px 16px;
-            box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.5);
-            animation: slideIn 0.3s ease-out, slideOut 0.3s ease-in 2.5s;
-            z-index: 1000;
-            max-width: 280px;
-        }
-
-        @keyframes slideIn {
-            from {
-                transform: translateX(400px);
-                opacity: 0;
-            }
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
-        }
-
-        @keyframes slideOut {
-            from {
-                transform: translateX(0);
-                opacity: 1;
-            }
-            to {
-                transform: translateX(400px);
-                opacity: 0;
-            }
-        }
-
-        .achievement-title {
-            font-weight: bold;
-            font-size: 1em;
-            margin-bottom: 4px;
-            color: #000;
-        }
-
-        .achievement-text {
-            font-size: 0.85em;
-            color: #333;
-        }
-
-        .footer {
-            margin-top: 16px;
-            text-align: center;
-            font-size: 0.75em;
-            color: #666;
-            padding: 8px;
-            border-top: 4px solid #000;
-        }
+        @keyframes slideIn { from{ transform:translateX(400px); opacity:0; } to{ transform:translateX(0); opacity:1; } }
+        @keyframes slideOut { from{ opacity:1; } to{ transform:translateX(400px); opacity:0; } }
+        .toast-title { font-size: .6em; color: #1a0a2e; margin-bottom: 4px; }
+        .toast-text { font-size: .5em; color: #333; }
+        .footer { margin-top: 14px; text-align: center; font-size: .45em; color: #665599; padding: 8px; border-top: 4px solid #3b2566; }
+        /* Pixel banana canvas */
+        canvas#banana-canvas { display: none; }
     </style>
 </head>
 <body>
-    <div class="game-container">
-        <header>
-            <h1>🍌 BANANA CLICKER 🍌</h1>
-            <div class="stats">
-                <div class="stat">
-                    <div class="stat-label">Bananas</div>
-                    <div class="stat-value" id="banana-count">0</div>
-                </div>
-                <div class="stat">
-                    <div class="stat-label">Per Second</div>
-                    <div class="stat-value" id="bps">0</div>
-                </div>
-                <div class="stat">
-                    <div class="stat-label">Total Clicks</div>
-                    <div class="stat-value" id="total-clicks">0</div>
-                </div>
-            </div>
-        </header>
-
-        <div class="main-content">
-            <div class="click-area">
-                <div id="banana">
-                    <div class="banana-pixel">🍌</div>
-                </div>
-            </div>
-
-            <div class="shop-panel">
-                <div class="panel-title">🛒 UPGRADE SHOP</div>
-                <div class="upgrades" id="upgrades"></div>
-            </div>
+<div class="game-wrap">
+    <header>
+        <h1>🍌 BANANA CLICKER 🍌</h1>
+        <div class="stats">
+            <div class="stat"><div class="stat-label">Bananas</div><div class="stat-value" id="s-bananas">0</div></div>
+            <div class="stat"><div class="stat-label">Per Second</div><div class="stat-value" id="s-bps">0</div></div>
+            <div class="stat"><div class="stat-label">Per Click</div><div class="stat-value" id="s-ppc">1</div></div>
+            <div class="stat"><div class="stat-label">Rebirths</div><div class="stat-value" id="s-rb">0</div></div>
         </div>
-
-        <div class="main-content" style="margin-top: 16px;">
-            <div class="prestige-panel">
-                <div class="panel-title">⭐ PRESTIGE</div>
-                <div class="prestige-content">
-                    <div class="golden-bananas" id="golden-bananas">🌟 0</div>
-                    <div class="prestige-info">
-                        <p><strong>Multiplier:</strong> <span id="prestige-multiplier">+0%</span></p>
-                        <p><strong>Next Prestige:</strong> <span id="next-prestige">1M bananas</span></p>
-                        <p><strong>Will Earn:</strong> <span id="will-earn">0 Golden Bananas</span></p>
-                    </div>
-                    <button class="prestige-button" id="prestige-btn">PRESTIGE</button>
+    </header>
+    <div class="main">
+        <div class="click-area" id="click-area">
+            <div class="banana-btn" id="banana-btn">🍌</div>
+            <div class="per-click-label" id="pcl">+1 per click</div>
+        </div>
+        <div>
+            <div class="tabs">
+                <div class="tab-btn active" data-tab="tab-upgrades">🛒 UPGRADES</div>
+                <div class="tab-btn" data-tab="tab-rebirth">⭐ REBIRTH</div>
+                <div class="tab-btn" data-tab="tab-stats">📊 STATS</div>
+            </div>
+            <!-- Upgrades -->
+            <div class="tab-content active" id="tab-upgrades">
+                <div class="panel">
+                    <div class="panel-title">🛒 UPGRADE SHOP</div>
+                    <div class="upgrade-list" id="upgrade-list"></div>
                 </div>
             </div>
-
-            <div class="prestige-panel">
-                <div class="panel-title">📊 STATISTICS</div>
-                <div class="prestige-content">
-                    <div class="prestige-info">
-                        <p><strong>Total Bananas:</strong><br><span id="total-earned">0</span></p>
-                        <p><strong>Total Clicks:</strong><br><span id="total-clicks-stat">0</span></p>
-                        <p><strong>Time Played:</strong><br><span id="time-played">0s</span></p>
-                        <p><strong>Prestige Level:</strong><br><span id="prestige-level">0</span></p>
+            <!-- Rebirth -->
+            <div class="tab-content" id="tab-rebirth">
+                <div class="panel">
+                    <div class="panel-title">⭐ REBIRTH</div>
+                    <div class="rebirth-box">
+                        <div class="rb-currency" id="rb-stars">⭐ 0 Stars</div>
+                        <div class="rb-info">
+                            <p><b>Multiplier:</b> <span id="rb-mult">x1.00</span></p>
+                            <p><b>Total Bananas Earned:</b> <span id="rb-total">0</span></p>
+                            <p><b>Stars on Rebirth:</b> <span id="rb-gain">0</span></p>
+                            <p style="font-size:.45em;color:#ff9900;margin-top:8px;">Need 1M total bananas to rebirth.<br>Stars = floor(sqrt(total / 1,000,000))</p>
+                        </div>
+                        <button class="rb-btn off" id="rb-btn">🔄 REBIRTH</button>
                     </div>
                 </div>
+                <div class="panel">
+                    <div class="panel-title">⭐ STAR UPGRADES</div>
+                    <div id="rb-upgrades"></div>
+                </div>
             </div>
-        </div>
-
-        <div class="settings">
-            <button class="settings-button" id="save-btn">💾 SAVE GAME</button>
-            <button class="settings-button" id="reset-btn">🔄 RESET GAME</button>
-        </div>
-
-        <div class="footer">
-            Made with 🍌 and ❤️ | Auto-saves every 10 seconds
+            <!-- Stats -->
+            <div class="tab-content" id="tab-stats">
+                <div class="panel">
+                    <div class="panel-title">📊 STATISTICS</div>
+                    <div class="rb-info">
+                        <p><b>Total Bananas (all time):</b> <span id="st-total">0</span></p>
+                        <p><b>Total Clicks:</b> <span id="st-clicks">0</span></p>
+                        <p><b>Total Rebirths:</b> <span id="st-rebirths">0</span></p>
+                        <p><b>Time Played:</b> <span id="st-time">0s</span></p>
+                        <p><b>Highest BPS:</b> <span id="st-hbps">0</span></p>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
+    <div class="settings">
+        <button class="s-btn" id="btn-save">💾 SAVE</button>
+        <button class="s-btn" id="btn-export">📋 EXPORT</button>
+        <button class="s-btn" id="btn-import">📂 IMPORT</button>
+        <button class="s-btn" id="btn-reset">💀 RESET</button>
+    </div>
+    <div class="footer">🍌 Banana Clicker v2.0 — Auto-saves every 15s 🍌</div>
+</div>
+<script>
+// ========== DATA ==========
+const UPGRADES = [
+    { id:'cursor',     name:'Cursor',         icon:'👆', baseCost:15,        bps:0.1,    desc:'Auto-clicks bananas' },
+    { id:'monkey',     name:'Monkey',          icon:'🐒', baseCost:100,       bps:1,      desc:'Trained banana picker' },
+    { id:'tree',       name:'Banana Tree',     icon:'🌴', baseCost:1100,      bps:8,      desc:'Grows bananas for you' },
+    { id:'farm',       name:'Banana Farm',     icon:'🚜', baseCost:12000,     bps:47,     desc:'Industrial banana growing' },
+    { id:'factory',    name:'Factory',         icon:'🏭', baseCost:130000,    bps:260,    desc:'Mass banana production' },
+    { id:'lab',        name:'Genetic Lab',     icon:'🔬', baseCost:1400000,   bps:1400,   desc:'Mutant super bananas' },
+    { id:'portal',     name:'Banana Portal',   icon:'🌀', baseCost:20000000,  bps:7800,   desc:'Bananas from other dimensions' },
+    { id:'temple',     name:'Banana Temple',   icon:'🛕', baseCost:330000000, bps:44000,  desc:'Ancient banana rituals' },
+    { id:'planet',     name:'Banana Planet',   icon:'🪐', baseCost:5100000000,bps:260000, desc:'An entire planet of bananas' },
+    { id:'universe',   name:'Bananaverse',     icon:'🌌', baseCost:75000000000,bps:1600000,desc:'Infinite banana multiverse' }
+];
 
-    <script>
-        // Game State
-        const game = {
-            bananas: 0,
-            totalBananas: 0,
-            totalClicks: 0,
-            goldenBananas: 0,
-            startTime: Date.now(),
-            lastUpdate: Date.now(),
-            upgrades: [
-                { id: 'cursor', name: 'Cursor', icon: '👆', baseCost: 15, cost: 15, owned: 0, bps: 0.1, description: 'Auto-clicks for you' },
-                { id: 'tree', name: 'Banana Tree', icon: '🌴', baseCost: 100, cost: 100, owned: 0, bps: 1, description: 'A small banana farm' },
-                { id: 'plantation', name: 'Plantation', icon: '🏞️', baseCost: 1100, cost: 1100, owned: 0, bps: 8, description: 'Medium scale production' },
-                { id: 'factory', name: 'Factory', icon: '🏭', baseCost: 12000, cost: 12000, owned: 0, bps: 47, description: 'Industrial banana output' },
-                { id: 'lab', name: 'Genetic Lab', icon: '🔬', baseCost: 130000, cost: 130000, owned: 0, bps: 260, description: 'Advanced banana science' },
-                { id: 'portal', name: 'Banana Portal', icon: '🌀', baseCost: 1400000, cost: 1400000, owned: 0, bps: 1400, description: 'Interdimensional bananas' }
-            ]
-        };
+const RB_UPGRADES = [
+    { id:'rb_click',  name:'+1 Click Power', icon:'👆', cost:1,  desc:'Each rebirth click +1',  type:'click',  val:1,  repeatable:true },
+    { id:'rb_bps2',   name:'BPS x2',         icon:'⚡', cost:3,  desc:'Double all BPS',          type:'bpsMul', val:2,  repeatable:false },
+    { id:'rb_click5',  name:'+5 Click Power', icon:'✊', cost:5,  desc:'Each rebirth click +5',  type:'click',  val:5,  repeatable:true },
+    { id:'rb_cheap',  name:'Cheaper Upgrades',icon:'💰', cost:5,  desc:'Upgrades cost 10% less', type:'costMul',val:0.9, repeatable:false },
+    { id:'rb_bps5',   name:'BPS x5',         icon:'🔥', cost:10, desc:'5x all BPS',              type:'bpsMul', val:5,  repeatable:false },
+    { id:'rb_click25', name:'+25 Click Power',icon:'💥', cost:15, desc:'Each rebirth click +25', type:'click',  val:25, repeatable:true },
+    { id:'rb_cheap2', name:'Even Cheaper',    icon:'🏷️', cost:20, desc:'Upgrades cost 20% less', type:'costMul',val:0.8, repeatable:false },
+    { id:'rb_bps10',  name:'BPS x10',        icon:'🌟', cost:30, desc:'10x all BPS',             type:'bpsMul', val:10, repeatable:false },
+    { id:'rb_auto',   name:'Auto-Click',      icon:'🤖', cost:50, desc:'Auto-click 5x/sec',      type:'auto',   val:5,  repeatable:false },
+    { id:'rb_bps100', name:'BPS x100',       icon:'💎', cost:100,desc:'100x all BPS',            type:'bpsMul', val:100,repeatable:false }
+];
 
-        // Game Elements
-        const bananaEl = document.getElementById('banana');
-        const bananaCountEl = document.getElementById('banana-count');
-        const bpsEl = document.getElementById('bps');
-        const totalClicksEl = document.getElementById('total-clicks');
-        const upgradesEl = document.getElementById('upgrades');
-        const prestigeBtn = document.getElementById('prestige-btn');
-        const goldenBananasEl = document.getElementById('golden-bananas');
-        const prestigeMultiplierEl = document.getElementById('prestige-multiplier');
-        const nextPrestigeEl = document.getElementById('next-prestige');
-        const willEarnEl = document.getElementById('will-earn');
-        const totalEarnedEl = document.getElementById('total-earned');
-        const totalClicksStatEl = document.getElementById('total-clicks-stat');
-        const timePlayedEl = document.getElementById('time-played');
-        const prestigeLevelEl = document.getElementById('prestige-level');
-        const saveBtn = document.getElementById('save-btn');
-        const resetBtn = document.getElementById('reset-btn');
+// ========== STATE ==========
+let G = freshState();
+function freshState() {
+    return {
+        bananas: 0, totalBananas: 0, allTimeBananas: 0, totalClicks: 0,
+        stars: 0, rebirths: 0, startTime: Date.now(), highBPS: 0,
+        upgrades: UPGRADES.map(u => ({ id:u.id, owned:0 })),
+        rbUpgrades: {}
+    };
+}
 
-        // Format Numbers
-        function formatNumber(num) {
-            if (num < 1000) return Math.floor(num).toString();
-            if (num < 1000000) return (num / 1000).toFixed(1) + 'K';
-            if (num < 1000000000) return (num / 1000000).toFixed(2) + 'M';
-            if (num < 1000000000000) return (num / 1000000000).toFixed(2) + 'B';
-            return (num / 1000000000000).toFixed(2) + 'T';
+// ========== HELPERS ==========
+function fmt(n) {
+    if (n < 0) n = 0;
+    if (n < 1e3) return Math.floor(n).toString();
+    if (n < 1e6) return (n/1e3).toFixed(1)+'K';
+    if (n < 1e9) return (n/1e6).toFixed(2)+'M';
+    if (n < 1e12) return (n/1e9).toFixed(2)+'B';
+    if (n < 1e15) return (n/1e12).toFixed(2)+'Qa';
+    return (n/1e18).toFixed(2)+'Qi';
+}
+
+function getRebirthMult() {
+    let m = 1;
+    for (const [id, count] of Object.entries(G.rbUpgrades)) {
+        const def = RB_UPGRADES.find(r => r.id === id);
+        if (!def) continue;
+        if (def.type === 'bpsMul') m *= def.val;
+    }
+    return m;
+}
+
+function getCostMult() {
+    let m = 1;
+    for (const [id, count] of Object.entries(G.rbUpgrades)) {
+        const def = RB_UPGRADES.find(r => r.id === id);
+        if (!def) continue;
+        if (def.type === 'costMul') m *= def.val;
+    }
+    return m;
+}
+
+function getClickPower() {
+    let p = 1;
+    for (const [id, count] of Object.entries(G.rbUpgrades)) {
+        const def = RB_UPGRADES.find(r => r.id === id);
+        if (!def) continue;
+        if (def.type === 'click') p += def.val * count;
+    }
+    return p * (1 + G.stars * 0.01);
+}
+
+function hasAutoClick() {
+    return !!G.rbUpgrades['rb_auto'];
+}
+
+function calcBPS() {
+    let bps = 0;
+    const mult = getRebirthMult() * (1 + G.stars * 0.01);
+    G.upgrades.forEach((u, i) => { bps += u.owned * UPGRADES[i].bps * mult; });
+    return bps;
+}
+
+function upgradeCost(idx) {
+    const base = UPGRADES[idx].baseCost;
+    const owned = G.upgrades[idx].owned;
+    return Math.floor(base * Math.pow(1.15, owned) * getCostMult());
+}
+
+function calcStars() { return Math.floor(Math.sqrt(G.totalBananas / 1e6)); }
+
+// ========== DOM ==========
+const $ = s => document.getElementById(s);
+const bananaBtn = $('banana-btn');
+const clickArea = $('click-area');
+
+// Tabs
+document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+        btn.classList.add('active');
+        $(btn.dataset.tab).classList.add('active');
+    });
+});
+
+// Click
+bananaBtn.addEventListener('click', e => {
+    const pw = getClickPower();
+    G.bananas += pw; G.totalBananas += pw; G.allTimeBananas += pw; G.totalClicks++;
+    spawnParticle(e, pw);
+    updateUI();
+});
+
+function spawnParticle(e, val) {
+    const p = document.createElement('div');
+    p.className = 'click-particle';
+    p.textContent = '+' + fmt(val);
+    const r = clickArea.getBoundingClientRect();
+    p.style.left = (e.clientX - r.left + (Math.random()*40-20)) + 'px';
+    p.style.top = (e.clientY - r.top) + 'px';
+    clickArea.appendChild(p);
+    setTimeout(() => p.remove(), 900);
+}
+
+// Buy upgrade
+function buyUpgrade(idx) {
+    const cost = upgradeCost(idx);
+    if (G.bananas >= cost) {
+        G.bananas -= cost;
+        G.upgrades[idx].owned++;
+        updateUI();
+    }
+}
+
+// Rebirth
+$('rb-btn').addEventListener('click', () => {
+    const newStars = calcStars();
+    if (newStars <= G.stars) return;
+    const gain = newStars - G.stars;
+    if (!confirm(`Rebirth and gain ${gain} ⭐ Stars?\nAll upgrades & bananas reset.\nYour stars: ${G.stars} → ${newStars}`)) return;
+    G.stars = newStars;
+    G.rebirths++;
+    G.bananas = 0;
+    G.totalBananas = 0;
+    G.upgrades = UPGRADES.map(u => ({ id:u.id, owned:0 }));
+    toast('⭐ Rebirth!', `You now have ${G.stars} stars!`);
+    saveGame();
+    updateUI();
+});
+
+// Rebirth upgrades
+function buyRBUpgrade(id) {
+    const def = RB_UPGRADES.find(r => r.id === id);
+    if (!def) return;
+    if (!def.repeatable && G.rbUpgrades[id]) return;
+    if (G.stars < def.cost) return;
+    G.stars -= def.cost;
+    G.rbUpgrades[id] = (G.rbUpgrades[id] || 0) + 1;
+    toast('⭐ Purchased!', def.name);
+    saveGame();
+    updateUI();
+}
+
+// ========== RENDERING ==========
+function renderUpgrades() {
+    const el = $('upgrade-list');
+    el.innerHTML = '';
+    UPGRADES.forEach((u, i) => {
+        const cost = upgradeCost(i);
+        const locked = G.bananas < cost;
+        const bpsEach = u.bps * getRebirthMult() * (1 + G.stars * 0.01);
+        const div = document.createElement('div');
+        div.className = 'upgrade-item' + (locked ? ' locked' : '');
+        div.innerHTML = `
+            <div class="up-icon">${u.icon}</div>
+            <div>
+                <div class="up-name">${u.name}</div>
+                <div class="up-desc">${u.desc}</div>
+                <div class="up-stats">+${fmt(bpsEach)} BPS each</div>
+            </div>
+            <div>
+                <div class="up-cost">🍌 ${fmt(cost)}</div>
+                <div class="up-owned">x${G.upgrades[i].owned}</div>
+            </div>`;
+        div.addEventListener('click', () => buyUpgrade(i));
+        el.appendChild(div);
+    });
+}
+
+function renderRBUpgrades() {
+    const el = $('rb-upgrades');
+    el.innerHTML = '';
+    RB_UPGRADES.forEach(def => {
+        const owned = G.rbUpgrades[def.id] || 0;
+        const maxed = !def.repeatable && owned > 0;
+        const locked = G.stars < def.cost && !maxed;
+        const div = document.createElement('div');
+        div.className = 'rb-upgrade' + (locked ? ' locked' : '') + (maxed ? ' owned-rb' : '');
+        div.innerHTML = `
+            <div class="up-icon">${def.icon}</div>
+            <div>
+                <div class="up-name">${def.name}${owned > 0 ? (def.repeatable ? ' x'+owned : ' ✓') : ''}</div>
+                <div class="up-desc">${def.desc}</div>
+            </div>
+            <div>
+                <div class="up-cost">${maxed ? '✅ OWNED' : '⭐ '+def.cost}</div>
+            </div>`;
+        if (!maxed) div.addEventListener('click', () => buyRBUpgrade(def.id));
+        el.appendChild(div);
+    });
+}
+
+function updateUI() {
+    const bps = calcBPS();
+    if (bps > G.highBPS) G.highBPS = bps;
+    $('s-bananas').textContent = fmt(G.bananas);
+    $('s-bps').textContent = fmt(bps);
+    $('s-ppc').textContent = fmt(getClickPower());
+    $('s-rb').textContent = G.rebirths;
+    $('pcl').textContent = '+' + fmt(getClickPower()) + ' per click';
+
+    // Rebirth tab
+    $('rb-stars').textContent = '⭐ ' + G.stars + ' Stars';
+    $('rb-mult').textContent = 'x' + (getRebirthMult() * (1 + G.stars * 0.01)).toFixed(2);
+    $('rb-total').textContent = fmt(G.totalBananas);
+    const newStars = calcStars();
+    const gain = Math.max(0, newStars - G.stars);
+    $('rb-gain').textContent = gain + ' ⭐';
+    const rbBtn = $('rb-btn');
+    if (gain > 0) { rbBtn.classList.remove('off'); } else { rbBtn.classList.add('off'); }
+
+    // Stats
+    $('st-total').textContent = fmt(G.allTimeBananas);
+    $('st-clicks').textContent = fmt(G.totalClicks);
+    $('st-rebirths').textContent = G.rebirths;
+    $('st-hbps').textContent = fmt(G.highBPS);
+    const t = Math.floor((Date.now() - G.startTime) / 1000);
+    const h = Math.floor(t/3600), m = Math.floor((t%3600)/60), s = t%60;
+    $('st-time').textContent = h > 0 ? h+'h '+m+'m '+s+'s' : m > 0 ? m+'m '+s+'s' : s+'s';
+
+    renderUpgrades();
+    renderRBUpgrades();
+}
+
+// ========== GAME LOOP ==========
+let lastTick = performance.now();
+let autoClickAcc = 0;
+
+function loop(now) {
+    const dt = (now - lastTick) / 1000;
+    lastTick = now;
+    const bps = calcBPS();
+    const earned = bps * dt;
+    if (earned > 0) {
+        G.bananas += earned;
+        G.totalBananas += earned;
+        G.allTimeBananas += earned;
+    }
+    // Auto-click
+    if (hasAutoClick()) {
+        autoClickAcc += dt;
+        const rate = 5;
+        while (autoClickAcc >= 1/rate) {
+            autoClickAcc -= 1/rate;
+            const pw = getClickPower();
+            G.bananas += pw;
+            G.totalBananas += pw;
+            G.allTimeBananas += pw;
         }
+    }
+    updateUI();
+    requestAnimationFrame(loop);
+}
+requestAnimationFrame(loop);
 
-        // Calculate BPS
-        function calculateBPS() {
-            let bps = 0;
-            const multiplier = 1 + (game.goldenBananas * 0.01);
-            game.upgrades.forEach(upgrade => {
-                bps += upgrade.owned * upgrade.bps * multiplier;
-            });
-            return bps;
+// ========== SAVE / LOAD ==========
+function saveGame() {
+    const d = {
+        bananas: G.bananas, totalBananas: G.totalBananas, allTimeBananas: G.allTimeBananas,
+        totalClicks: G.totalClicks, stars: G.stars, rebirths: G.rebirths,
+        startTime: G.startTime, highBPS: G.highBPS,
+        upgrades: G.upgrades, rbUpgrades: G.rbUpgrades
+    };
+    localStorage.setItem('bananaClicker2', JSON.stringify(d));
+}
+
+function loadGame() {
+    try {
+        const raw = localStorage.getItem('bananaClicker2');
+        if (!raw) return;
+        const d = JSON.parse(raw);
+        G.bananas = d.bananas || 0;
+        G.totalBananas = d.totalBananas || 0;
+        G.allTimeBananas = d.allTimeBananas || 0;
+        G.totalClicks = d.totalClicks || 0;
+        G.stars = d.stars || 0;
+        G.rebirths = d.rebirths || 0;
+        G.startTime = d.startTime || Date.now();
+        G.highBPS = d.highBPS || 0;
+        if (d.upgrades) {
+            d.upgrades.forEach((su, i) => { if (G.upgrades[i]) { G.upgrades[i].owned = su.owned || 0; } });
         }
+        if (d.rbUpgrades) G.rbUpgrades = d.rbUpgrades;
+    } catch(e) { console.error('Load error', e); }
+}
 
-        // Calculate Golden Bananas for Prestige
-        function calculateGoldenBananas() {
-            return Math.floor(Math.sqrt(game.totalBananas / 1000000));
-        }
+function exportSave() {
+    saveGame();
+    const raw = localStorage.getItem('bananaClicker2');
+    navigator.clipboard.writeText(btoa(raw)).then(() => toast('📋 Exported', 'Save copied to clipboard!'));
+}
 
-        // Click Handler
-        bananaEl.addEventListener('click', (e) => {
-            const clickPower = 1 * (1 + game.goldenBananas * 0.01);
-            game.bananas += clickPower;
-            game.totalBananas += clickPower;
-            game.totalClicks++;
+function importSave() {
+    const code = prompt('Paste your save code:');
+    if (!code) return;
+    try {
+        const json = atob(code);
+        localStorage.setItem('bananaClicker2', json);
+        location.reload();
+    } catch(e) { alert('Invalid save code!'); }
+}
 
-            // Visual feedback
-            bananaEl.style.animation = 'none';
-            setTimeout(() => {
-                bananaEl.style.animation = 'float 2s ease-in-out infinite';
-            }, 10);
+function resetGame() {
+    if (!confirm('DELETE ALL PROGRESS?\nThis cannot be undone!')) return;
+    localStorage.removeItem('bananaClicker2');
+    location.reload();
+}
 
-            // Create particle
-            const particle = document.createElement('div');
-            particle.className = 'click-particle';
-            particle.textContent = '+' + formatNumber(clickPower);
-            particle.style.left = (e.clientX - e.currentTarget.getBoundingClientRect().left) + 'px';
-            particle.style.top = (e.clientY - e.currentTarget.getBoundingClientRect().top) + 'px';
-            e.currentTarget.parentElement.appendChild(particle);
+// Buttons
+$('btn-save').addEventListener('click', () => { saveGame(); toast('💾 Saved', 'Game saved!'); });
+$('btn-export').addEventListener('click', exportSave);
+$('btn-import').addEventListener('click', importSave);
+$('btn-reset').addEventListener('click', resetGame);
 
-            setTimeout(() => particle.remove(), 1000);
+// Auto-save
+setInterval(saveGame, 15000);
 
-            updateDisplay();
-        });
+// Toast
+function toast(title, text) {
+    const t = document.createElement('div');
+    t.className = 'toast';
+    t.innerHTML = `<div class="toast-title">${title}</div><div class="toast-text">${text}</div>`;
+    document.body.appendChild(t);
+    setTimeout(() => t.remove(), 3000);
+}
 
-        // Buy Upgrade
-        function buyUpgrade(upgrade, event) {
-            // Prevent event bubbling
-            if (event) {
-                event.stopPropagation();
-            }
-            
-            if (game.bananas >= upgrade.cost) {
-                game.bananas -= upgrade.cost;
-                upgrade.owned++;
-                upgrade.cost = Math.floor(upgrade.baseCost * Math.pow(1.15, upgrade.owned));
-                updateDisplay();
-                checkAchievements(upgrade);
-            }
-        }
-
-        // Prestige
-        prestigeBtn.addEventListener('click', () => {
-            const goldenBananasEarned = calculateGoldenBananas();
-            if (goldenBananasEarned > game.goldenBananas) {
-                if (confirm(`Reset everything and gain ${goldenBananasEarned - game.goldenBananas} Golden Bananas?\n\nThis will permanently boost your production by ${goldenBananasEarned}%!`)) {
-                    game.goldenBananas = goldenBananasEarned;
-                    game.bananas = 0;
-                    game.upgrades.forEach(upgrade => {
-                        upgrade.owned = 0;
-                        upgrade.cost = upgrade.baseCost;
-                    });
-                    showAchievement('Prestige!', `You now have ${game.goldenBananas} Golden Bananas!`);
-                    updateDisplay();
-                    saveGame();
-                }
-            }
-        });
-
-        // Render Upgrades
-        function renderUpgrades() {
-            upgradesEl.innerHTML = '';
-            game.upgrades.forEach(upgrade => {
-                const upgradeDiv = document.createElement('div');
-                upgradeDiv.className = 'upgrade' + (game.bananas < upgrade.cost ? ' disabled' : '');
-                
-                const totalBPS = upgrade.owned * upgrade.bps * (1 + game.goldenBananas * 0.01);
-                
-                upgradeDiv.innerHTML = `
-                    <div class="upgrade-icon">${upgrade.icon}</div>
-                    <div class="upgrade-info">
-                        <div class="upgrade-name">${upgrade.name}</div>
-                        <div class="upgrade-description">${upgrade.description}</div>
-                        <div class="upgrade-stats">Owned: ${upgrade.owned} | +${formatNumber(totalBPS)} BPS</div>
-                    </div>
-                    <div class="upgrade-buy">
-                        <div class="upgrade-cost">🍌 ${formatNumber(upgrade.cost)}</div>
-                        <button class="upgrade-button" data-upgrade="${upgrade.id}">BUY</button>
-                    </div>
-                `;
-                
-                // Add click handler to the entire upgrade div, but handle button clicks specially
-                upgradeDiv.addEventListener('click', (e) => {
-                    if (game.bananas >= upgrade.cost) {
-                        buyUpgrade(upgrade, e);
-                    }
-                });
-                
-                upgradesEl.appendChild(upgradeDiv);
-            });
-        }
-
-        // Update Display
-        function updateDisplay() {
-            bananaCountEl.textContent = formatNumber(game.bananas);
-            bpsEl.textContent = formatNumber(calculateBPS());
-            totalClicksEl.textContent = formatNumber(game.totalClicks);
-            
-            goldenBananasEl.textContent = '🌟 ' + game.goldenBananas;
-            prestigeMultiplierEl.textContent = '+' + (game.goldenBananas * 1) + '%';
-            
-            const nextGolden = calculateGoldenBananas();
-            const canPrestige = nextGolden > game.goldenBananas;
-            prestigeBtn.className = 'prestige-button' + (canPrestige ? '' : ' disabled');
-            nextPrestigeEl.textContent = formatNumber(1000000);
-            willEarnEl.textContent = nextGolden + ' Golden Bananas';
-            
-            totalEarnedEl.textContent = formatNumber(game.totalBananas);
-            totalClicksStatEl.textContent = formatNumber(game.totalClicks);
-            prestigeLevelEl.textContent = game.goldenBananas;
-            
-            const timePlayed = Math.floor((Date.now() - game.startTime) / 1000);
-            const hours = Math.floor(timePlayed / 3600);
-            const minutes = Math.floor((timePlayed % 3600) / 60);
-            const seconds = timePlayed % 60;
-            timePlayedEl.textContent = hours > 0 ? `${hours}h ${minutes}m ${seconds}s` : 
-                                       minutes > 0 ? `${minutes}m ${seconds}s` : `${seconds}s`;
-            
-            renderUpgrades();
-        }
-
-        // Game Loop
-        function gameLoop(timestamp) {
-            const deltaTime = (timestamp - game.lastUpdate) / 1000;
-            game.lastUpdate = timestamp;
-
-            const bps = calculateBPS();
-            const earned = bps * deltaTime;
-            game.bananas += earned;
-            game.totalBananas += earned;
-
-            updateDisplay();
-            requestAnimationFrame(gameLoop);
-        }
-
-        // Achievements
-        let shownAchievements = new Set();
-
-        function checkAchievements(upgrade) {
-            const achievements = [
-                { id: 'first-upgrade', condition: () => upgrade.owned === 1, title: 'First Steps!', text: `You bought your first ${upgrade.name}!` },
-                { id: 'ten-upgrades', condition: () => upgrade.owned === 10, title: 'Getting Serious!', text: `10 ${upgrade.name}s!` },
-                { id: 'hundred-upgrades', condition: () => upgrade.owned === 100, title: 'Mega Production!', text: `100 ${upgrade.name}s!` }
-            ];
-
-            achievements.forEach(achievement => {
-                const key = achievement.id + '-' + upgrade.id;
-                if (!shownAchievements.has(key) && achievement.condition()) {
-                    showAchievement(achievement.title, achievement.text);
-                    shownAchievements.add(key);
-                }
-            });
-        }
-
-        function showAchievement(title, text) {
-            const toast = document.createElement('div');
-            toast.className = 'achievement-toast';
-            toast.innerHTML = `
-                <div class="achievement-title">🏆 ${title}</div>
-                <div class="achievement-text">${text}</div>
-            `;
-            document.body.appendChild(toast);
-            setTimeout(() => toast.remove(), 3000);
-        }
-
-        // Save/Load System
-        function saveGame() {
-            const saveData = {
-                bananas: game.bananas,
-                totalBananas: game.totalBananas,
-                totalClicks: game.totalClicks,
-                goldenBananas: game.goldenBananas,
-                startTime: game.startTime,
-                upgrades: game.upgrades.map(u => ({ owned: u.owned, cost: u.cost })),
-                shownAchievements: Array.from(shownAchievements)
-            };
-            localStorage.setItem('bananaClickerSave', JSON.stringify(saveData));
-            console.log('Game saved!');
-        }
-
-        function loadGame() {
-            const saved = localStorage.getItem('bananaClickerSave');
-            if (saved) {
-                try {
-                    const saveData = JSON.parse(saved);
-                    game.bananas = saveData.bananas || 0;
-                    game.totalBananas = saveData.totalBananas || 0;
-                    game.totalClicks = saveData.totalClicks || 0;
-                    game.goldenBananas = saveData.goldenBananas || 0;
-                    game.startTime = saveData.startTime || Date.now();
-                    
-                    if (saveData.upgrades) {
-                        game.upgrades.forEach((upgrade, index) => {
-                            if (saveData.upgrades[index]) {
-                                upgrade.owned = saveData.upgrades[index].owned || 0;
-                                upgrade.cost = saveData.upgrades[index].cost || upgrade.baseCost;
-                            }
-                        });
-                    }
-                    
-                    if (saveData.shownAchievements) {
-                        shownAchievements = new Set(saveData.shownAchievements);
-                    }
-                    
-                    console.log('Game loaded successfully!');
-                } catch (e) {
-                    console.error('Failed to load game:', e);
-                }
-            }
-        }
-
-        function resetGame() {
-            if (confirm('Are you sure you want to reset ALL progress? This cannot be undone!')) {
-                localStorage.removeItem('bananaClickerSave');
-                location.reload();
-            }
-        }
-
-        // Event Listeners
-        saveBtn.addEventListener('click', () => {
-            saveGame();
-            showAchievement('Game Saved', 'Your progress has been saved!');
-        });
-        resetBtn.addEventListener('click', resetGame);
-
-        // Auto-save every 10 seconds
-        setInterval(saveGame, 10000);
-
-        // Initialize
-        loadGame();
-        game.lastUpdate = performance.now();
-        updateDisplay();
-        requestAnimationFrame(gameLoop);
-
-        // Show welcome message
-        setTimeout(() => {
-            showAchievement('Welcome!', 'Click the banana to start earning!');
-        }, 500);
-    </script>
+// Init
+loadGame();
+updateUI();
+setTimeout(() => toast('🍌 Welcome!', 'Click the banana to start!'), 600);
+</script>
 </body>
 </html>
